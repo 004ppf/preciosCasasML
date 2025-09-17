@@ -1,42 +1,40 @@
-# uvicorn main:app --reload --host 0.0.0.0 --port 8000
-
 # main.py
-import pandas as pd
+from fastapi import FastAPI
+from pydantic import BaseModel
 import joblib
 import os
-from fastapi import FastAPI
+import pandas as pd
 
-# Crear la app de FastAPI
+# Inicializar FastAPI
 app = FastAPI(title="API Árbol de Regresión - Precios de Casas")
 
-# Ruta al modelo entrenado
+# 📂 Ruta del modelo entrenado
 MODEL_PATH = os.path.join("modelos", "modelo_regresion_casas.pkl")
-
-# Cargar el modelo al iniciar
 model = joblib.load(MODEL_PATH)
 print(f"✅ Modelo cargado desde {MODEL_PATH}")
 
+# 📌 Definición del esquema de entrada (JSON esperado)
+class Features(BaseModel):
+    superficie: float
+    habitaciones: int
+    antiguedad: float
+    ubicacion_rural: int
+    ubicacion_urbano: int
+
+# Endpoint de bienvenida
 @app.get("/")
 def home():
     return {"mensaje": "API Árbol de Regresión - Precios de Casas está activa 🚀"}
 
+# Endpoint de predicción con JSON en body
 @app.post("/predecir")
-def predecir(superficie: float, habitaciones: int, antiguedad: float, ubicacion_rural: int, ubicacion_urbano: int):
-    """
-    Endpoint para predecir el precio de una casa.
-    Ejemplo de uso:
-    /predecir?superficie=120&habitaciones=3&antiguedad=10&ubicacion_rural=0&ubicacion_urbano=1
-    """
-    df = pd.DataFrame([{
-        "superficie": superficie,
-        "habitaciones": habitaciones,
-        "antiguedad": antiguedad,
-        "ubicacion_rural": ubicacion_rural,
-        "ubicacion_urbano": ubicacion_urbano
-    }])
-
-    # Reordenar columnas para que coincidan con el modelo
+def predecir(features: Features):
+    # Convertir JSON a DataFrame
+    df = pd.DataFrame([features.dict()])
+    
+    # Asegurar que las columnas estén en el orden correcto
     df = df.reindex(columns=model.feature_names_in_, fill_value=0)
-
+    
+    # Hacer predicción
     prediccion = model.predict(df)[0]
     return {"precio_estimado": round(float(prediccion), 2)}
