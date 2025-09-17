@@ -1,0 +1,37 @@
+# Entorno virtual
+.venv/
+venv/
+ENV/
+env/
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+
+# Archivos de logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.swp
+*.DS_Store
+Thumbs.db
+
+# Configuración de IDEs
+.vscode/
+.idea/
+
+# Archivos de Jupyter (si algún día los usas)
+.ipynb_checkpoints/
+
+# Carpetas de builds
+build/
+dist/
+*.egg-info/
+
+# Datos locales (opcional: puedes mantener los CSV de ejemplo si quieres compartirlos)
+data/casas_sucias.csv
+data/casas_limpias.csv
