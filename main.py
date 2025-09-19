@@ -8,10 +8,10 @@ import pandas as pd
 # Inicializar FastAPI
 app = FastAPI(title="API Árbol de Regresión - Precios de Casas")
 
-# 📂 Ruta del modelo entrenado
-MODEL_PATH = os.path.join("modelos", "modelo_regresion_casas.pkl")
+# 📂 Ruta del modelo entrenado (precios colombianos)
+MODEL_PATH = os.path.join("modelos", "modelo_regresion_casas_colombia.pkl")
 model = joblib.load(MODEL_PATH)
-print(f"✅ Modelo cargado desde {MODEL_PATH}")
+print(f"✅ Modelo colombiano cargado desde {MODEL_PATH}")
 
 # 📌 Definición del esquema de entrada (JSON esperado)
 class Features(BaseModel):
@@ -24,7 +24,7 @@ class Features(BaseModel):
 # Endpoint de bienvenida
 @app.get("/")
 def home():
-    return {"mensaje": "API Árbol de Regresión - Precios de Casas está activa 🚀"}
+    return {"mensaje": "API Árbol de Regresión - Precios de Casas Colombia está activa 🇨🇴"}
 
 # Endpoint de predicción con JSON en body
 @app.post("/predecir")
