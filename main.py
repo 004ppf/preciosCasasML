@@ -37,4 +37,8 @@ def predecir(features: Features):
     
     # Hacer predicción
     prediccion = model.predict(df)[0]
-    return {"precio_estimado": round(float(prediccion), 2)}
+    return {
+        "precio_estimado": round(float(prediccion), 2),
+        "unidad": "millones de pesos colombianos (COP)",
+        "precio_formateado": f"${round(float(prediccion), 2):,.2f} millones COP"
+    }
